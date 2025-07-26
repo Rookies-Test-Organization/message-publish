@@ -1,0 +1,25 @@
+# src/main/resources/application.yml
+spring:
+  kafka:
+    bootstrap-servers: kafka.default.svc.cluster.local:9092
+
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        spring.json.add.type.headers: false
+        spring.json.type.mapping: ticketingRequest:ticketing.rookies.queue.domain.ticketing.dto.TicketingRequest,ticketingResponse:ticketing.rookies.queue.domain.ticketing.dto.TicketingResponse
+
+    consumer:
+      group-id: ticketing-queue-group
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      auto-offset-reset: latest
+      properties:
+        spring.json.value.default.type: ticketing.rookies.queue.domain.ticketing.dto.TicketingRequest
+
+app:
+  kafka:
+    ticketing:
+      request-topic: "ticketing-request"
+      response-topic: "ticketing-response"
